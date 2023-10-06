@@ -34,10 +34,11 @@ async function getUser(username){
 
 const app = express();
 app.use(express.json());
-app.use(cors({
-    origin: "*",
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE"
-}));
+app.use(
+    cors({
+        origin: "*",
+    })
+);
 
 
 app.post('/loginUser', async (req, res) => {
