@@ -8,17 +8,7 @@ const session = require('express-session');
 const expireTime = 60 * 60 * 1000;
 
 const app = express();
-app.use(express.json());
-app.use(session({
-    secret: process.env.NODE_SECRET_SESSION,
-    store: mongoStore,
-    saveUninitialized: false,
-    resave: true,
-    cookie: {
-        maxAge: expireTime,
-        secure: false
-    }
-}));
+
 
 mongoose.connect(process.env.MONGO_URL, {});
 mongoose.connection.once('open', () => {
@@ -63,7 +53,18 @@ async function getUser(username){
     }
 }
 
-
+// app.use section
+app.use(express.json());
+app.use(session({
+    secret: process.env.NODE_SECRET_SESSION,
+    store: mongoStore,
+    saveUninitialized: false,
+    resave: true,
+    cookie: {
+        maxAge: expireTime,
+        secure: false
+    }
+}));
 const corsOptions = {
     origin:'*', 
     credentials:true,            //access-control-allow-credentials:true
