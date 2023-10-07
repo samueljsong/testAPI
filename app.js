@@ -50,10 +50,12 @@ app.post('/loginUser', async (req, res) => {
     let results = await getUser(username);
 
     if(results.password === password){
+        res.set('Access-Control-Allow-Origin', '*');
         res.json({
             loginSuccess: true
         })
     }else {
+        res.set('Access-Control-Allow-Origin', '*');
         res.json({
             loginSuccess: false
         })
@@ -61,12 +63,14 @@ app.post('/loginUser', async (req, res) => {
 })
 
 app.get('/', (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
     res.json({
         api: "SAMS API"
     })
 })
 
 app.get('*', (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
     res.json({
         api: "404"
     })
