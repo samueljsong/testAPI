@@ -34,19 +34,19 @@ async function getUser(username){
 
 const app = express();
 app.use(express.json());
-app.use(
-    cors({
-        origin: "*",
-        credentials: true,
-    })
-);
+const corsOptions ={
+    origin:'*', 
+    credentials:true,            //access-control-allow-credentials:true
+    optionSuccessStatus:200,
+ }
+app.use(cors(corsOptions));
 
 
 app.post('/loginUser', async (req, res) => {
     let username = req.body.username;
     console.log(username);
     let password = req.body.password;
-
+    
     let results = await getUser(username);
 
     if(results.password === password){
