@@ -35,7 +35,7 @@ async function getUser(username){
 const app = express();
 app.use(express.json());
 const corsOptions = {
-    origin:'https://testclient.netlify.app/', 
+    origin:'*', 
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200,
  }
