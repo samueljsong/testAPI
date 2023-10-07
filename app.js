@@ -60,6 +60,18 @@ app.post('/loginUser', async (req, res) => {
     }
 })
 
+app.get('/', (req, res) => {
+    res.json({
+        api: "SAMS API"
+    })
+})
+
+app.get('*', (req, res) => {
+    res.json({
+        api: "404"
+    })
+})
+
 
 app.listen(8000, () => {
     console.log(`App is listening port: ${8000}`)
