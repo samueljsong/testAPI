@@ -34,8 +34,8 @@ async function getUser(username){
 
 const app = express();
 app.use(express.json());
-const corsOptions ={
-    origin:'*', 
+const corsOptions = {
+    origin:'https://testclient.netlify.app/', 
     credentials:true,            //access-control-allow-credentials:true
     optionSuccessStatus:200,
  }
@@ -50,12 +50,10 @@ app.post('/loginUser', async (req, res) => {
     let results = await getUser(username);
 
     if(results.password === password){
-        res.set('Access-Control-Allow-Origin', '*');
         res.json({
             loginSuccess: true
         })
     }else {
-        res.set('Access-Control-Allow-Origin', '*');
         res.json({
             loginSuccess: false
         })
@@ -63,14 +61,12 @@ app.post('/loginUser', async (req, res) => {
 })
 
 app.get('/', (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
     res.json({
         api: "SAMS API"
     })
 })
 
 app.get('*', (req, res) => {
-    res.set('Access-Control-Allow-Origin', '*');
     res.json({
         api: "404"
     })
