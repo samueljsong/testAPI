@@ -1,6 +1,38 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const MongoStore = require('connect-mongo');
+const session = require('express-session');
+
+const expireTime = 60 * 60 * 1000;
+
+const app = express();
+app.use(express.json());
+app.use(session({
+    secret: process.env.NODE_SECRET_SESSION,
+    store: mongoStore,
+    saveUninitialized: false,
+    resave: true,
+    cookie: {
+        maxAge: expireTime,
+        secure: false
+    }
+}));
+
+mongoose.connect(process.env.MONGO_URL, {});
+mongoose.connection.once('open', () => {
+    console.log('MongoDB: connected...')
+})
+
+let mongoStore = MongoStore.create({
+    mongoUrl: process.env.MONGO_URL,
+    crypto: {
+        secret: process.env.MONGO_SESSION_SECRET
+    },
+    collectionName: "sessions"
+})
+
 
 const mysql = require('mysql2/promise');
 
@@ -32,8 +64,6 @@ async function getUser(username){
 }
 
 
-const app = express();
-app.use(express.json());
 const corsOptions = {
     origin:'*', 
     credentials:true,            //access-control-allow-credentials:true
@@ -50,13 +80,17 @@ app.post('/loginUser', async (req, res) => {
     let results = await getUser(username);
 
     if(results.password === password){
+        req.session.authenticated = true;
+        req.session.cookie.maxAge = expireTime;
         res.json({
             loginSuccess: true
         })
+        return;
     }else {
         res.json({
             loginSuccess: false
         })
+        return;
     }
 })
 
