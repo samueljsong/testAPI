@@ -75,11 +75,11 @@ app.use(cors(corsOptions));
 
 app.post('/loginUser', async (req, res) => {
     let username = req.body.username;
-    console.log(username);
     let password = req.body.password;
     
     let results = await getUser(username);
 
+    console.log(results.username);
     if(results.password === password){
         req.session.authenticated = true;
         req.session.cookie.maxAge = expireTime;
