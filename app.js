@@ -83,6 +83,7 @@ app.post('/loginUser', async (req, res) => {
     if(results.password === password){
         req.session.authenticated = true;
         req.session.cookie.maxAge = expireTime;
+        req.username = results.username;
         res.json({
             loginSuccess: true
         })
@@ -90,6 +91,20 @@ app.post('/loginUser', async (req, res) => {
     }else {
         res.json({
             loginSuccess: false
+        })
+        return;
+    }
+})
+
+app.get('/landing', async (req, res) => {
+    if(req.session.authenticated){
+        res.json({
+            username: req.session.username
+        })
+        return;
+    } else {
+        res.json({
+            username: 'none'
         })
         return;
     }
