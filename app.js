@@ -98,18 +98,7 @@ app.post('/loginUser', async (req, res) => {
 })
 
 app.get('/landing', async (req, res) => {
-    console.log(req.session.username);
-    if(req.session.authenticated){
-        res.json({
-            username: req.session.username
-        })
-        return;
-    } else {
-        res.json({
-            username: 'none'
-        })
-        return;
-    }
+    req.session.destroy();
 })
 
 app.get('/', (req, res) => {
