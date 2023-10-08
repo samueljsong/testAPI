@@ -25,6 +25,8 @@ let mongoStore = MongoStore.create({
 
 
 const mysql = require('mysql2/promise');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
 let dbConfig = {
     host: process.env.MYSQL_HOST,   
@@ -53,7 +55,10 @@ async function getUser(username){
     }
 }
 
+
 // app.use section
+app.use(cookieParser())
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
 app.use(session({
     secret: process.env.NODE_SECRET_SESSION,
