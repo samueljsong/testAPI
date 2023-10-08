@@ -65,6 +65,7 @@ app.use(session({
         secure: false
     }
 }));
+
 const corsOptions = {
     origin:'*', 
     credentials:true,            //access-control-allow-credentials:true
@@ -97,6 +98,7 @@ app.post('/loginUser', async (req, res) => {
 })
 
 app.get('/landing', async (req, res) => {
+    console.log(req.session.username);
     if(req.session.authenticated){
         res.json({
             username: req.session.username
