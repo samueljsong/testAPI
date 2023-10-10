@@ -40,7 +40,7 @@ let database = mysql.createPool(dbConfig);
 
 async function getUser(username){
     let getUserSQL = `
-        SELECT password
+        SELECT *
         FROM users
         WHERE username = (?)
     `
@@ -79,31 +79,42 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 
+
 app.post('/loginUser', async (req, res) => {
     let username = req.body.username;
     let password = req.body.password;
     
     let results = await getUser(username);
 
-    console.log(results.username);
     if(results.password === password){
         req.session.authenticated = true;
+        req.session.username = results.username;
         req.session.cookie.maxAge = expireTime;
-        req.username = results.username;
+        let sessionID = req.sessionID;
         res.json({
-            loginSuccess: true
-        })
+            loginSuccess: true,
+            sessionID: sessionID
+        });
+
         return;
     }else {
         res.json({
-            loginSuccess: false
+            loginSuccess: false,
+            sessionID: req.sessionID
         })
         return;
     }
 })
 
-app.get('/landing', async (req, res) => {
-    req.session.destroy();
+app.post('/landing', async (req, res) => {
+    console.log("cookie sessionid: " + req.body.sessionID)
+    req.sessionStore.get(req.body.sessionID, (e, session) => {
+        if (session.authenticated){
+            res.json({
+                username: session.username
+            })
+        }
+    })
 })
 
 app.get('/', (req, res) => {
