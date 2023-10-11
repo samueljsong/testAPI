@@ -10,10 +10,7 @@ const expireTime = 60 * 60 * 1000;
 const app = express();
 
 
-mongoose.connect(process.env.MONGO_URL, {});
-mongoose.connection.once('open', () => {
-    console.log('MongoDB: connected...')
-})
+
 
 let mongoStore = MongoStore.create({
     mongoUrl: process.env.MONGO_URL,
@@ -130,6 +127,12 @@ app.get('*', (req, res) => {
 })
 
 
-app.listen(8000, () => {
-    console.log(`App is listening port: ${8000}`)
+mongoose.connect(process.env.MONGO_URL, {})
+    .then(() => {
+        app.listen(4000, () => {
+            console.log("LISTENING ON PORT 4000")
+        })
+    });
+mongoose.connection.once('open', () => {
+    console.log('MongoDB: connected...')
 })
