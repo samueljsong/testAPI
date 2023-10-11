@@ -65,16 +65,22 @@ async function getUser(username){
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
-// app.use(session({
-//     secret: process.env.NODE_SECRET_SESSION,
-//     store: mongoStore,
-//     saveUninitialized: false,
-//     resave: true,
-//     cookie: {
-//         maxAge: expireTime,
-//         secure: false
-//     }
-// }));
+app.use(session({
+    secret: process.env.NODE_SECRET_SESSION,
+    store: new MongoStore(
+        {
+            mongoUrl: process.env.MONGO_URL,
+            crypto: {secret: process.env.MONGO_SESSION_SECRET},
+            collectionName: "sessions"
+        }
+    ),
+    saveUninitialized: false,
+    resave: true,
+    cookie: {
+        maxAge: expireTime,
+        secure: false
+    }
+}));
 
 const corsOptions = {
     origin:'*', 
