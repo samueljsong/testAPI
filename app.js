@@ -20,13 +20,13 @@ const connectDB = async () => {
 }
 
 
-let mongoStore = MongoStore.create({
-    mongoUrl: process.env.MONGO_URL,
-    crypto: {
-        secret: process.env.MONGO_SESSION_SECRET
-    },
-    collectionName: "sessions"
-})
+// let mongoStore = MongoStore.create({
+//     mongoUrl: process.env.MONGO_URL,
+//     crypto: {
+//         secret: process.env.MONGO_SESSION_SECRET
+//     },
+//     collectionName: "sessions"
+// })
 
 
 const mysql = require('mysql2/promise');
@@ -65,16 +65,16 @@ async function getUser(username){
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.json());
-app.use(session({
-    secret: process.env.NODE_SECRET_SESSION,
-    store: mongoStore,
-    saveUninitialized: false,
-    resave: true,
-    cookie: {
-        maxAge: expireTime,
-        secure: false
-    }
-}));
+// app.use(session({
+//     secret: process.env.NODE_SECRET_SESSION,
+//     store: mongoStore,
+//     saveUninitialized: false,
+//     resave: true,
+//     cookie: {
+//         maxAge: expireTime,
+//         secure: false
+//     }
+// }));
 
 const corsOptions = {
     origin:'*', 
@@ -83,7 +83,11 @@ const corsOptions = {
  }
 app.use(cors(corsOptions));
 
-
+app.get('/' , (req, res) => {
+    res.json({
+        message: "hello"
+    })
+})
 
 app.post('/loginUser', async (req, res) => {
     let username = req.body.username;
