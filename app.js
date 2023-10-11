@@ -129,7 +129,7 @@ app.get('*', (req, res) => {
 
 mongoose.connect(process.env.MONGO_URL, {})
     .then(() => {
-        app.listen(4000, () => {
+        app.listen(3000, () => {
             console.log("LISTENING ON PORT 4000")
         })
     });
